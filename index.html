@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The One With Our 2 Year & 4 Month Anniversary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gabriela&family=Caveat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f2e9d8;
+    --deep-red: #c0392b;
+    --mustard: #e4b34b;
+    --teal: #2e8b87;
+    --navy: #1e3a5f;
+    --brown: #3d2817;
+    --ink: #1a1a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    min-height: 100vh;
+    font-family: 'Gabriela', serif;
+    background: var(--ink);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ============ OPENING CREDITS SCREEN ============ */
+  .credits-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    overflow: hidden;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .credits-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Fountain silhouette */
+  .fountain {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 180px;
+    opacity: 0;
+    animation: fadeInScene 2s ease-out 0.3s forwards;
+  }
+
+  @keyframes fadeInScene {
+    to { opacity: 0.85; }
+  }
+
+  .fountain-base {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 20px;
+    background: var(--cream);
+    border-radius: 50%;
+  }
+
+  .fountain-pillar {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 90px;
+    background: var(--cream);
+  }
+
+  .fountain-top {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 15px;
+    background: var(--cream);
+    border-radius: 50%;
+  }
+
+  /* Water droplets */
+  .droplet {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--cream);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .droplet:nth-child(1) { left: 30%; top: 20%; animation: drop 2s ease-in 1.5s infinite; }
+  .droplet:nth-child(2) { left: 50%; top: 10%; animation: drop 2.2s ease-in 1.7s infinite; }
+  .droplet:nth-child(3) { left: 70%; top: 20%; animation: drop 1.8s ease-in 1.9s infinite; }
+  .droplet:nth-child(4) { left: 40%; top: 15%; animation: drop 2.1s ease-in 2.1s infinite; }
+  .droplet:nth-child(5) { left: 60%; top: 15%; animation: drop 1.9s ease-in 2.3s infinite; }
+
+  @keyframes drop {
+    0% { opacity: 0; transform: translateY(-20px); }
+    20% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(100px); }
+  }
+
+  /* Couch silhouette */
+  .couch {
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    width: 280px;
+    height: 90px;
+    opacity: 0;
+    animation: slideUpCouch 1.5s ease-out 1s forwards;
+  }
+
+  @keyframes slideUpCouch {
+    to {
+      opacity: 0.9;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .couch-body {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--deep-red);
+    border-radius: 10px 10px 0 0;
+  }
+
+  .couch-back {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    right: 10px;
+    height: 50px;
+    background: var(--deep-red);
+    border-radius: 15px 15px 5px 5px;
+    filter: brightness(0.85);
+  }
+
+  .couch-cushion {
+    position: absolute;
+    bottom: 10px;
+    width: 48%;
+    height: 25px;
+    background: var(--deep-red);
+    filter: brightness(1.1);
+    border-radius: 5px;
+  }
+
+  .couch-cushion.left { left: 2%; }
+  .couch-cushion.right { right: 2%; }
+
+  /* Title text */
+  .credits-title {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+    opacity: 0;
+    animation: titleIn 1.5s ease-out 2.5s forwards;
+  }
+
+  @keyframes titleIn {
+    from { opacity: 0; transform: translateY(20px); letter-spacing: 0.5em; }
+    to { opacity: 1; transform: translateY(0); letter-spacing: 0.1em; }
+  }
+
+  .credits-subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 2vw, 18px);
+    letter-spacing: 0.4em;
+    color: var(--mustard);
+    margin-bottom: 20px;
+  }
+
+  .credits-main {
+    font-family: 'Gabriela', serif;
+    font-size: clamp(38px, 8vw, 90px);
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  .credits-main .dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: var(--mustard);
+    border-radius: 50%;
+    margin: 0 8px;
+    vertical-align: middle;
+    transform: translateY(-8px);
+  }
+
+  .credits-tagline {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(20px, 3vw, 28px);
+    color: var(--mustard);
+    margin-top: 25px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 4s forwards;
+  }
+
+  .enter-btn {
+    margin-top: 35px;
+    padding: 14px 36px;
+    background: transparent;
+    border: 2px solid var(--mustard);
+    color: var(--mustard);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 4.5s forwards;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 3;
+  }
+
+  .enter-btn:hover {
+    background: var(--mustard);
+    color: #000;
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ MAIN CONTENT ============ */
+  .main-content {
+    min-height: 100vh;
+    background: var(--cream);
+    color: var(--brown);
+    display: none;
+    padding: 40px 20px;
+  }
+
+  .main-content.active {
+    display: block;
+    animation: fadeInMain 1s ease-out;
+  }
+
+  @keyframes fadeInMain {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 30px 20px;
+    border-bottom: 3px dotted var(--deep-red);
+    margin-bottom: 40px;
+  }
+
+  .header-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.4em;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .header-title {
+    font-family: 'Gabriela', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    color: var(--deep-red);
+    line-height: 1.1;
+    margin-bottom: 15px;
+  }
+
+  .header-sub {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(22px, 3vw, 30px);
+    color: var(--navy);
+  }
+
+  /* Quiz section */
+  .quiz-box {
+    background: #fff;
+    border: 3px solid var(--brown);
+    border-radius: 8px;
+    padding: 30px 28px;
+    margin-bottom: 30px;
+    box-shadow: 8px 8px 0 var(--deep-red);
+    position: relative;
+  }
+
+  .quiz-tag {
+    position: absolute;
+    top: -16px;
+    left: 24px;
+    background: var(--mustard);
+    padding: 4px 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--brown);
+    border: 2px solid var(--brown);
+  }
+
+  .quiz-intro {
+    text-align: center;
+    padding: 20px 10px 10px;
+  }
+
+  .quiz-intro h2 {
+    font-family: 'Gabriela', serif;
+    font-size: clamp(24px, 4vw, 34px);
+    color: var(--deep-red);
+    margin-bottom: 15px;
+    line-height: 1.2;
+  }
+
+  .quiz-intro p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--brown);
+    margin-bottom: 20px;
+  }
+
+  .quiz-start-btn {
+    padding: 12px 32px;
+    background: var(--teal);
+    color: var(--cream);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    box-shadow: 4px 4px 0 var(--brown);
+  }
+
+  .quiz-start-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--brown);
+  }
+
+  .question-block { display: none; }
+  .question-block.active { display: block; }
+
+  .question-counter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .question-text {
+    font-family: 'Gabriela', serif;
+    font-size: clamp(18px, 2.5vw, 22px);
+    color: var(--brown);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option {
+    padding: 14px 20px;
+    background: var(--cream);
+    border: 2px solid var(--brown);
+    font-family: 'Gabriela', serif;
+    font-size: 16px;
+    color: var(--brown);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+  }
+
+  .option:hover:not(:disabled) {
+    background: var(--mustard);
+    transform: translateX(4px);
+  }
+
+  .option.correct {
+    background: var(--teal);
+    color: var(--cream);
+    border-color: var(--teal);
+  }
+
+  .option.wrong {
+    background: var(--deep-red);
+    color: var(--cream);
+    border-color: var(--deep-red);
+  }
+
+  .option:disabled { cursor: not-allowed; }
+
+  .feedback {
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 4px;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    display: none;
+    text-align: center;
+  }
+
+  .feedback.show { display: block; }
+  .feedback.right { background: #d4edda; color: #155724; }
+  .feedback.off { background: #f8d7da; color: #721c24; }
+
+  .next-btn {
+    margin-top: 16px;
+    padding: 10px 28px;
+    background: var(--brown);
+    color: var(--cream);
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    border-radius: 4px;
+    display: none;
+  }
+
+  .next-btn.show { display: inline-block; }
+
+  /* Invitation reveal */
+  .invitation {
+    display: none;
+    animation: slideUp 1s ease-out;
+  }
+
+  .invitation.active { display: block; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .invite-card {
+    background: #fff;
+    border: 3px solid var(--brown);
+    padding: 40px 30px;
+    margin-bottom: 25px;
+    position: relative;
+    box-shadow: 10px 10px 0 var(--teal);
+  }
+
+  .invite-card::before {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px dashed var(--deep-red);
+    pointer-events: none;
+  }
+
+  .invite-episode {
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .invite-title {
+    text-align: center;
+    font-family: 'Gabriela', serif;
+    font-size: clamp(26px, 4vw, 38px);
+    color: var(--deep-red);
+    line-height: 1.2;
+    margin-bottom: 25px;
+  }
+
+  .invite-heart {
+    text-align: center;
+    font-size: 30px;
+    color: var(--deep-red);
+    margin: 15px 0;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px dotted var(--brown);
+  }
+
+  .detail-row:last-child { border-bottom: none; }
+
+  .detail-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    background: var(--mustard);
+    color: var(--brown);
+    padding: 6px 12px;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 3px;
+  }
+
+  .detail-text {
+    flex: 1;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--brown);
+  }
+
+  .detail-text strong {
+    font-family: 'Gabriela', serif;
+    font-size: 18px;
+    color: var(--deep-red);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Personal message */
+  .message-card {
+    background: #fffdf5;
+    border: 2px solid var(--brown);
+    padding: 35px 28px;
+    margin-bottom: 25px;
+    position: relative;
+    transform: rotate(-1deg);
+    box-shadow: 6px 6px 0 rgba(61, 40, 23, 0.3);
+  }
+
+  .message-stamp {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--deep-red);
+    color: var(--cream);
+    padding: 6px 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    transform: rotate(3deg);
+  }
+
+  .message-from {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--teal);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .message-text {
+    font-family: 'Caveat', cursive;
+    font-size: clamp(22px, 3vw, 28px);
+    line-height: 1.5;
+    color: var(--brown);
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .message-sign {
+    text-align: right;
+    margin-top: 20px;
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    color: var(--deep-red);
+    font-weight: 700;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 3px dotted var(--deep-red);
+    margin-top: 20px;
+  }
+
+  .footer-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .footer-text {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--brown);
+  }
+
+  /* Decorative dots pattern */
+  .dots-row {
+    text-align: center;
+    margin: 20px 0;
+    letter-spacing: 0.5em;
+    color: var(--mustard);
+    font-size: 20px;
+  }
+
+  @media (max-width: 520px) {
+    .detail-row {
+      flex-direction: column;
+      gap: 6px;
+    }
+    .detail-icon { min-width: auto; align-self: flex-start; }
+    .invite-card, .message-card, .quiz-box { padding: 25px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ OPENING CREDITS ============ -->
+<div class="credits-screen" id="creditsScreen">
+  <!-- Fountain -->
+  <div class="fountain">
+    <div class="droplet"></div>
+    <div class="droplet"></div>
+    <div class="droplet"></div>
+    <div class="droplet"></div>
+    <div class="droplet"></div>
+    <div class="fountain-top"></div>
+    <div class="fountain-pillar"></div>
+    <div class="fountain-base"></div>
+  </div>
+
+  <!-- Couch -->
+  <div class="couch">
+    <div class="couch-body"></div>
+    <div class="couch-back"></div>
+    <div class="couch-cushion left"></div>
+    <div class="couch-cushion right"></div>
+  </div>
+
+  <!-- Title -->
+  <div class="credits-title">
+    <div class="credits-subtitle">The One With</div>
+    <div class="credits-main">
+      Linh <span class="dot"></span> & <span class="dot"></span> Khang
+    </div>
+    <div class="credits-tagline">~ 2 years & 4 months of us ~</div>
+    <button class="enter-btn" onclick="enterShow()">I'll Be There For You →</button>
+  </div>
+</div>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content" id="mainContent">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-label">★ Season 2 · Episode 4 ★</div>
+      <h1 class="header-title">The One Where We<br/>Celebrate Us</h1>
+      <div class="header-sub">Gửi tặng cục bông đáng iu cụa anh 💌</div>
+    </div>
+
+    <!-- Quiz Box -->
+    <div class="quiz-box" id="quizBox">
+      <div class="quiz-tag">★ Trivia Time ★</div>
+
+      <!-- Intro -->
+      <div class="quiz-intro" id="quizIntro">
+        <h2>So No One Told You Life Was Gonna Be This Way...</h2>
+        <p>But before you get the invitation, Smelly Cat says you gotta prove you're a real FRIENDS fan first. Ready?</p>
+        <button class="quiz-start-btn" onclick="startQuiz()">PIVOT! Start Quiz</button>
+      </div>
+
+      <!-- Question 1 -->
+      <div class="question-block" id="q1">
+        <div class="question-counter">Question 01 / 05</div>
+        <div class="question-text">What is the name of Chandler's on-again-off-again girlfriend before Monica?</div>
+        <div class="options">
+          <button class="option" onclick="answer(this, false, 1)">Kathy</button>
+          <button class="option" onclick="answer(this, true, 1)">Janice</button>
+          <button class="option" onclick="answer(this, false, 1)">Aurora</button>
+          <button class="option" onclick="answer(this, false, 1)">Julie</button>
+        </div>
+        <div class="feedback" id="fb1"></div>
+        <button class="next-btn" onclick="nextQuestion(2)">Next →</button>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question-block" id="q2">
+        <div class="question-counter">Question 02 / 05</div>
+        <div class="question-text">In "The One Where Ross Finds Out," what does Rachel leave on Ross's answering machine?</div>
+        <div class="options">
+          <button class="option" onclick="answer(this, false, 2)">A birthday song</button>
+          <button class="option" onclick="answer(this, false, 2)">A shopping list</button>
+          <button class="option" onclick="answer(this, true, 2)">A drunken confession that she's over him</button>
+          <button class="option" onclick="answer(this, false, 2)">An invitation to dinner</button>
+        </div>
+        <div class="feedback" id="fb2"></div>
+        <button class="next-btn" onclick="nextQuestion(3)">Next →</button>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question-block" id="q3">
+        <div class="question-counter">Question 03 / 05</div>
+        <div class="question-text">What is Joey's famous pick-up line?</div>
+        <div class="options">
+          <button class="option" onclick="answer(this, false, 3)">"Could I BE any more charming?"</button>
+          <button class="option" onclick="answer(this, true, 3)">"How you doin'?"</button>
+          <button class="option" onclick="answer(this, false, 3)">"Smelly cat, smelly cat..."</button>
+          <button class="option" onclick="answer(this, false, 3)">"We were on a break!"</button>
+        </div>
+        <div class="feedback" id="fb3"></div>
+        <button class="next-btn" onclick="nextQuestion(4)">Next →</button>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question-block" id="q4">
+        <div class="question-counter">Question 04 / 05</div>
+        <div class="question-text">What does Ross yell while trying to move a couch up the stairs?</div>
+        <div class="options">
+          <button class="option" onclick="answer(this, false, 4)">"Push!"</button>
+          <button class="option" onclick="answer(this, false, 4)">"Turn!"</button>
+          <button class="option" onclick="answer(this, true, 4)">"Pivot!"</button>
+          <button class="option" onclick="answer(this, false, 4)">"Lift!"</button>
+        </div>
+        <div class="feedback" id="fb4"></div>
+        <button class="next-btn" onclick="nextQuestion(5)">Next →</button>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="question-block" id="q5">
+        <div class="question-counter">Question 05 / 05 · Final Question!</div>
+        <div class="question-text">What is the name of the coffee shop where the friends always hang out?</div>
+        <div class="options">
+          <button class="option" onclick="answer(this, false, 5)">Java Joe's</button>
+          <button class="option" onclick="answer(this, false, 5)">The Coffee Bean</button>
+          <button class="option" onclick="answer(this, true, 5)">Central Perk</button>
+          <button class="option" onclick="answer(this, false, 5)">Brew Haha</button>
+        </div>
+        <div class="feedback" id="fb5"></div>
+        <button class="next-btn" onclick="revealInvite()">Reveal Your Invitation →</button>
+      </div>
+    </div>
+
+    <!-- Invitation Reveal -->
+    <div class="invitation" id="invitation">
+
+      <div class="dots-row">• • • • •</div>
+
+      <!-- The main invite card -->
+      <div class="invite-card">
+        <div class="invite-episode">★ The One With The Anniversary Date ★</div>
+        <h2 class="invite-title">You're Officially Invited<br/>To Our Anniversary Night</h2>
+
+        <div class="invite-heart">♥</div>
+
+        <div class="detail-row">
+          <div class="detail-icon">WHEN</div>
+          <div class="detail-text">
+            <strong>This Friday Night</strong>
+            Your time in Vietnam 🇻🇳<br/>
+            <em>(I'll be right there with you from the US 🇺🇸)</em>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">WHERE</div>
+          <div class="detail-text">
+            <strong>Our Own Little Central Perk</strong>
+            A casual online date · wherever you are, I'll be there too
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">DRESS</div>
+          <div class="detail-text">
+            <strong>Coziest Mode Activated</strong>
+            The comfiest clothes you can find. Pajamas = 100% encouraged.
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-icon">WITH</div>
+          <div class="detail-text">
+            <strong>Me. Obviously.</strong>
+            Your co-star for this episode (and hopefully every episode after)
+          </div>
+        </div>
+
+        <div class="invite-heart">♥</div>
+      </div>
+
+      <!-- Personal message card -->
+      <div class="message-card">
+        <div class="message-stamp">★ From Khang ★</div>
+        <div class="message-from">— A little note for Linh xinh iu —</div>
+        <div class="message-text">
+          "Dạo này bận thì có bận<br/>
+          nhưng mà cứ đến anni<br/>
+          là kiểu j cũng có ngày rảnh,<br/>
+          vì em là cua ảnh." 💕
+        </div>
+        <div class="message-sign">— Khang ck Linh</div>
+      </div>
+
+      <div class="dots-row">• • • • •</div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-label">★ END CREDITS ★</div>
+        <div class="footer-text">
+          I'll be there for you,<br/>
+          cause you're there for me too 🎵
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let correctCount = 0;
+
+  function enterShow() {
+    const credits = document.getElementById('creditsScreen');
+    const main = document.getElementById('mainContent');
+    credits.classList.add('fade-out');
+    setTimeout(() => {
+      credits.style.display = 'none';
+      main.classList.add('active');
+      window.scrollTo(0, 0);
+    }, 1000);
+  }
+
+  function startQuiz() {
+    document.getElementById('quizIntro').style.display = 'none';
+    document.getElementById('q1').classList.add('active');
+  }
+
+  function answer(btn, isCorrect, qNum) {
+    const block = document.getElementById('q' + qNum);
+    const options = block.querySelectorAll('.option');
+    const feedback = document.getElementById('fb' + qNum);
+    const nextBtn = block.querySelector('.next-btn');
+
+    // Disable all options
+    options.forEach(o => o.disabled = true);
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      correctCount++;
+      feedback.textContent = getCorrectMsg(qNum);
+      feedback.classList.add('show', 'right');
+    } else {
+      btn.classList.add('wrong');
+      // Highlight the correct one
+      options.forEach(o => {
+        if (o.getAttribute('onclick').includes('true')) {
+          o.classList.add('correct');
+        }
+      });
+      feedback.textContent = "Oh no! But that's okay — you still get the invitation 💕";
+      feedback.classList.add('show', 'off');
+    }
+
+    nextBtn.classList.add('show');
+  }
+
+  function getCorrectMsg(q) {
+    const msgs = {
+      1: "Correct! OH. MY. GOD. 🎉",
+      2: "Yes! You know your Ross & Rachel moments 💘",
+      3: "How YOU doin'? Getting these right! 😉",
+      4: "PIVOT! PIVOT! PIV-OT! You got it! 🛋️",
+      5: "Could you BE any more right?! ☕"
+    };
+    return msgs[q] || "Correct!";
+  }
+
+  function nextQuestion(n) {
+    // Hide all questions
+    document.querySelectorAll('.question-block').forEach(q => q.classList.remove('active'));
+    document.getElementById('q' + n).classList.add('active');
+    document.getElementById('q' + n).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function revealInvite() {
+    document.getElementById('quizBox').style.display = 'none';
+    const invite = document.getElementById('invitation');
+    invite.classList.add('active');
+    setTimeout(() => {
+      invite.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+  }
+</script>
+
+</body>
+</html>
